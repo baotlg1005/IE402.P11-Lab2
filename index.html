@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>3D - Building Map</title>
+
+	<style>
+		html,
+		body,
+		#viewDiv {
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+		}
+	</style>
+
+	<link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+	<script src="https://js.arcgis.com/4.29/"></script>
+
+	<script>
+
+		let jsondata = {
+			points: [
+			],
+			polygons: [
+			]
+		}
+
+		function AddPoint(x, y, z) {
+			//add point to jsondata points
+			jsondata.points.push({
+				type: "point",
+				x: x,
+				y: y,
+				z: z,
+				symbol: {
+					type: "simple-marker",
+					color: [226, 119, 40],
+					outline: {
+						color: [255, 255, 255],
+						width: 2
+					}
+				},
+				Name: "Point 01",
+				Location: "location point 01",
+				popupTemplate: popup_template
+			});
+		}
+
+		function AddPolygons(listRing, color) {
+			//add polygon to jsondata polygons
+			jsondata.polygons.push({
+				type: "polygon",
+				rings: listRing,
+				symbol: {
+					type: "simple-fill",
+					color: color,
+					outline: null
+				}
+			});
+		}
+
+		function AddWallWithWindow(outerPoint, innerPoint, color = [255, 255, 255]) {
+			ring = outerPoint;
+			ring.push(outerPoint[0]);
+
+			ring = [...ring, ...innerPoint.reverse()];
+
+			ring.push(innerPoint[0]);
+
+			
+
+			AddPolygons(ring, color);
+
+		}
+
+		AddWallWithWindow(
+			outerPoint = [
+				[106.72123722906395, 10.794975920016158, 10],
+				[106.72175578950052, 10.794320746255044, 10],
+				[106.72175578950052, 10.794320746255044, 100],
+				[106.72123722906395, 10.794975920016158, 100],
+			],
+			innerPoint = [
+				[106.7214104152098, 10.794757528681288, 20],
+				[106.72158360135565, 10.794539137347277, 20],
+				[
+					106.72158360135565,
+					10.794539137347277,
+					80
+				],
+				[
+					106.7214104152098,
+					10.794757528681288,
+					80
+				],
+				[
+					106.7214104152098,
+					10.794757528681288,
+					20
+				]
+
+			],
+			color = [255, 0, 0]
+		)
+
+		console.log(jsondata);
+
+		require([
+			"esri/Map",
+			"esri/views/SceneView",
+			"esri/layers/GraphicsLayer",
+			"esri/Graphic",
+		], function (
+			Map, SceneView, GraphicsLayer, Graphic
+		) {
+
+			const map = new Map({
+				basemap: "topo-vector",
+				ground: "world-elevation"
+			});
+
+			const view = new SceneView({
+				container: "viewDiv",
+				map: map,
+				camera: {
+					position: [106.72123722906395, 10.794975920016158, 300],
+					heading: 10,
+					tilt: 60
+				}
+			});
+			var createGraphic = function (data) {
+				return new Graphic({
+					geometry: data,
+					symbol: data.symbol,
+					attributes: data,
+				});
+			};
+			var graphicsLayer = new GraphicsLayer();
+
+			jsondata.points.forEach(function (data) {
+				graphicsLayer.add(createGraphic(data));
+			});
+			jsondata.polygons.forEach(function (data) {
+				graphicsLayer.add(createGraphic(data));
+			});
+
+			map.add(graphicsLayer);
+		});
+
+	</script>
+</head>
+
+<body>
+	<div id="viewDiv"></div>
+</body>
+
+</html>
