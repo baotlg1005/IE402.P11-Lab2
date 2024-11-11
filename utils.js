@@ -294,7 +294,7 @@ function midpoint(pointA, pointB) {
     let y_m = (pointA.y + pointB.y) / 2;
 
     // Trả về trung điểm dưới dạng đối tượng
-    return { x_m, y_m, z};
+    return [ x_m, y_m, z];
 }
 
 function reflect(listPoint, topReflectPoint, botReflectPoint) {
