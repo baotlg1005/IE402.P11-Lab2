@@ -273,3 +273,93 @@ function CreateCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta){
     
         return points;
 }
+
+function midpoint(pointA, pointB) {
+
+    let z = pointA[2];
+
+    pointA = 
+    {
+        x: pointA[0],
+        y: pointA[1]
+    }
+
+    pointB = {
+        x: pointB[0],
+        y: pointB[1]
+    }
+
+    // Tính tọa độ trung điểm
+    let x_m = (pointA.x + pointB.x) / 2;
+    let y_m = (pointA.y + pointB.y) / 2;
+
+    // Trả về trung điểm dưới dạng đối tượng
+    return { x_m, y_m, z};
+}
+
+function reflect(listPoint, topReflectPoint, botReflectPoint) {
+
+    let z = topReflectPoint[2]
+
+    topReflectPoint = {
+        x: topReflectPoint[0],
+        y: topReflectPoint[1]
+    }
+
+    botReflectPoint = {
+        x: botReflectPoint[0],
+        y: botReflectPoint[1]
+    }
+
+    //for each item in listPoint
+    listPoint = listPoint.map(point => {
+        return {
+            x: point[0],
+            y: point[1]
+        }
+    })
+
+    // Tính vector chỉ phương của đường thẳng
+    let v = {
+        x: botReflectPoint.x - topReflectPoint.x,
+        y: botReflectPoint.y - topReflectPoint.y
+    };
+
+    // Mảng để lưu các điểm phản chiếu
+    let reflectedPoints = [];
+
+    // Lặp qua từng điểm trong listPoint
+    for (let i = 0; i < listPoint.length; i++) {
+        let P = listPoint[i]; // Điểm cần chiếu
+
+        // Tính vector từ topReflectPoint đến điểm P
+        let w = {
+            x: P.x - topReflectPoint.x,
+            y: P.y - topReflectPoint.y
+        };
+
+        // Tính tỉ lệ chiếu (dot product)
+        let t = (w.x * v.x + w.y * v.y) / (v.x * v.x + v.y * v.y);
+
+        // Tính điểm chiếu Q trên đường thẳng
+        let Q = {
+            x: topReflectPoint.x + t * v.x,
+            y: topReflectPoint.y + t * v.y
+        };
+
+        // Tính điểm phản chiếu R đối xứng với Q qua đường thẳng
+        let R = {
+            x: 2 * Q.x - P.x,
+            y: 2 * Q.y - P.y
+        };
+
+        // Thêm điểm phản chiếu vào mảng kết quả
+        reflectedPoints.push(R);
+}
+
+reflectedPoints = reflectedPoints.map(point => {
+    return [point.x, point.y, z]
+});
+
+    return reflectedPoints;
+}

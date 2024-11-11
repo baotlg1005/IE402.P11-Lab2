@@ -48,10 +48,10 @@ function ChangeToOldCoordinate(point) {
 // Ví dụ sử dụng các hàm:
 
 // Khởi tạo hệ tọa độ mới
-SetupNewCoordinate([1, 2, 3], [4, 5, 6]);
+SetupNewCoordinate([10.870015767286764, 106.80284997218187, 0], [10.87006647339033, 106.80290361635979, 0]);
 
 // Chuyển tọa độ từ hệ tọa độ tuyệt đối sang hệ tọa độ mới
-const newCoord = funcChangeToNewCoordinate([10, 11, 12]);
+const newCoord = funcChangeToNewCoordinate([10.87006647339033, 106.80290361635979, 0]);
 console.log("Tọa độ mới:", newCoord);
 
 // Chuyển tọa độ từ hệ tọa độ mới về hệ tọa độ tuyệt đối
