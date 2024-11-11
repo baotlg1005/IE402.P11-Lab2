@@ -24,7 +24,7 @@ function AddPolyline(listPoint, color) {
         symbol: {
             type: "simple-line",
             color: color,
-            width: 4
+            width: 1
         }
     });
 }
@@ -88,13 +88,13 @@ function AddCircleWithCenter(centerPoint, radius, delta) {
     //AddPolygon(points);
 }
 
-function AddCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta, color = [0,0,0]) {
+function AddCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta, color = [0, 0, 0]) {
 
     points = CreateCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta);
     AddPolygon(points, color);
 }
 
-function AddCylinder(firstPoint, secondPoint, thirdPoint, delta, height, color = [0,0,0]){
+function AddRoundCylinder(firstPoint, secondPoint, thirdPoint, delta, height, color = [0, 0, 0]) {
     bottomPoint = CreateCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta);
 
     for (let i = bottomPoint.length - 1; i > 0; i--) {
@@ -118,7 +118,40 @@ function AddCylinder(firstPoint, secondPoint, thirdPoint, delta, height, color =
 
         AddPolygon(ring, color);
     }
+}
 
+function AddCylindner(bottomPoints, height, color = [0, 0, 0]) {
+
+    AddPolyline(bottomPoints, [0, 0, 0]);
+
+    let topPoints = [];
+
+    for (let i = bottomPoints.length - 1; i > 0; i--) {
+
+        let firstBottomPoint = bottomPoints[i];
+        let secondBottomPoint = bottomPoints[i - 1];
+
+        let firstTopPoint = [
+            firstBottomPoint[0],
+            firstBottomPoint[1],
+            firstBottomPoint[2] + height
+        ]
+
+        let secondTopPoint = [
+            secondBottomPoint[0],
+            secondBottomPoint[1],
+            secondBottomPoint[2] + height
+        ]
+
+        topPoints.push(firstTopPoint);
+        topPoints.push(secondTopPoint);
+
+        ring = [firstBottomPoint, secondBottomPoint, secondTopPoint, firstTopPoint, firstBottomPoint];
+
+        AddPolygon(ring, color);
+    }
+
+    AddPolyline(topPoints, [0, 0, 0]);
 }
 
 function CreateCurveLine(leftPoint, rightPoint, color, deg, delta, direction) {
@@ -217,68 +250,68 @@ function CreateCurveLine(leftPoint, rightPoint, color, deg, delta, direction) {
     return listPoint;
 }
 
-function CreateCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta){
-        // Hàm tính trung điểm của hai điểm
-        function midpoint(P, Q) {
-            return [(P[0] + Q[0]) / 2, (P[1] + Q[1]) / 2];
-        }
-    
-        // Hàm tính độ dốc của một đoạn thẳng
-        function slope(P, Q) {
-            return (Q[1] - P[1]) / (Q[0] - P[0]);
-        }
-    
-        // Hàm tìm giao điểm của hai đường thẳng
-        function intersection(m1, b1, m2, b2) {
-            const x = (b2 - b1) / (m1 - m2);
-            const y = m1 * x + b1;
-            return [x, y];
-        }
-    
-        // Tính trung điểm và độ dốc của các đoạn thẳng
-        const midAB = midpoint(firstPoint, secondPoint);
-        const midBC = midpoint(secondPoint, thirdPoint);
-    
-        const slopeAB = slope(firstPoint, secondPoint);
-        const slopeBC = slope(secondPoint, thirdPoint);
-    
-        // Tính độ dốc của đường trung trực (nghịch đảo và đổi dấu)
-        const perpSlopeAB = -1 / slopeAB;
-        const perpSlopeBC = -1 / slopeBC;
-    
-        // Tìm giao điểm của hai đường trung trực (tâm của đường tròn)
-        const center = intersection(
-            perpSlopeAB,
-            midAB[1] - perpSlopeAB * midAB[0],
-            perpSlopeBC,
-            midBC[1] - perpSlopeBC * midBC[0]
-        );
-    
-        // Tính bán kính (khoảng cách từ tâm đến bất kỳ điểm nào trong ba điểm đã cho)
-        const radius = Math.sqrt(
-            (center[0] - firstPoint[0]) ** 2 + (center[1] - firstPoint[1]) ** 2
-        );
-        console.log("radius:" + radius);
-    
-        // Tạo các điểm trên đường tròn
-        const points = [];
-        for (let i = 0; i < delta; i++) {
-            const angle = (2 * Math.PI * i) / delta;
-            const x = center[0] + radius * Math.cos(angle);
-            const y = center[1] + radius * Math.sin(angle);
-            points.push([x, y, firstPoint[2]]);
-        }
-    
-        points.push(points[0]);
-    
-        return points;
+function CreateCircleWithThreePoint(firstPoint, secondPoint, thirdPoint, delta) {
+    // Hàm tính trung điểm của hai điểm
+    function midpoint(P, Q) {
+        return [(P[0] + Q[0]) / 2, (P[1] + Q[1]) / 2];
+    }
+
+    // Hàm tính độ dốc của một đoạn thẳng
+    function slope(P, Q) {
+        return (Q[1] - P[1]) / (Q[0] - P[0]);
+    }
+
+    // Hàm tìm giao điểm của hai đường thẳng
+    function intersection(m1, b1, m2, b2) {
+        const x = (b2 - b1) / (m1 - m2);
+        const y = m1 * x + b1;
+        return [x, y];
+    }
+
+    // Tính trung điểm và độ dốc của các đoạn thẳng
+    const midAB = midpoint(firstPoint, secondPoint);
+    const midBC = midpoint(secondPoint, thirdPoint);
+
+    const slopeAB = slope(firstPoint, secondPoint);
+    const slopeBC = slope(secondPoint, thirdPoint);
+
+    // Tính độ dốc của đường trung trực (nghịch đảo và đổi dấu)
+    const perpSlopeAB = -1 / slopeAB;
+    const perpSlopeBC = -1 / slopeBC;
+
+    // Tìm giao điểm của hai đường trung trực (tâm của đường tròn)
+    const center = intersection(
+        perpSlopeAB,
+        midAB[1] - perpSlopeAB * midAB[0],
+        perpSlopeBC,
+        midBC[1] - perpSlopeBC * midBC[0]
+    );
+
+    // Tính bán kính (khoảng cách từ tâm đến bất kỳ điểm nào trong ba điểm đã cho)
+    const radius = Math.sqrt(
+        (center[0] - firstPoint[0]) ** 2 + (center[1] - firstPoint[1]) ** 2
+    );
+    console.log("radius:" + radius);
+
+    // Tạo các điểm trên đường tròn
+    const points = [];
+    for (let i = 0; i < delta; i++) {
+        const angle = (2 * Math.PI * i) / delta;
+        const x = center[0] + radius * Math.cos(angle);
+        const y = center[1] + radius * Math.sin(angle);
+        points.push([x, y, firstPoint[2]]);
+    }
+
+    points.push(points[0]);
+
+    return points;
 }
 
 function midpoint(pointA, pointB) {
 
     let z = pointA[2];
 
-    pointA = 
+    pointA =
     {
         x: pointA[0],
         y: pointA[1]
@@ -294,7 +327,7 @@ function midpoint(pointA, pointB) {
     let y_m = (pointA.y + pointB.y) / 2;
 
     // Trả về trung điểm dưới dạng đối tượng
-    return [ x_m, y_m, z];
+    return [x_m, y_m, z];
 }
 
 function reflect(listPoint, topReflectPoint, botReflectPoint) {
@@ -355,11 +388,59 @@ function reflect(listPoint, topReflectPoint, botReflectPoint) {
 
         // Thêm điểm phản chiếu vào mảng kết quả
         reflectedPoints.push(R);
-}
+    }
 
-reflectedPoints = reflectedPoints.map(point => {
-    return [point.x, point.y, z]
-});
+    reflectedPoints = reflectedPoints.map(point => {
+        return [point.x, point.y, z]
+    });
 
     return reflectedPoints;
+}
+
+function resizePolygon(listPoint, ratio) {
+    listPoint = listPoint.map(point => {
+        return {
+            x: point[0],
+            y: point[1],
+            z: point[2],
+        }
+    })
+
+    // Tính toán trung điểm (centroid) của đa giác
+    let centroid = { x: 0, y: 0 , z: 0};
+    
+    // Tính tổng các tọa độ điểm
+    for (let i = 0; i < listPoint.length; i++) {
+        centroid.x += listPoint[i].x;
+        centroid.y += listPoint[i].y;
+        centroid.z += listPoint[i].z
+    }
+    
+    // Tính trung điểm
+    centroid.x /= listPoint.length;
+    centroid.y /= listPoint.length;
+    centroid.z /= listPoint.length;
+
+    // Mảng lưu các điểm đã resize
+    let resizedPoints = [];
+
+    // Resize từng điểm
+    for (let i = 0; i < listPoint.length; i++) {
+        let P = listPoint[i];
+        
+        // Tính điểm mới bằng công thức resize
+        let newPoint = {
+            x: centroid.x + ratio * (P.x - centroid.x),
+            y: centroid.y + ratio * (P.y - centroid.y),
+            z: centroid.z + ratio * (P.z - centroid.z)
+        };
+        
+        resizedPoints.push([
+            newPoint.x,
+            newPoint.y,
+            newPoint.z
+        ]);
+    }
+
+    return resizedPoints;
 }
