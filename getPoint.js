@@ -30,7 +30,7 @@ function setupGetPoint(view, graphicsLayer) {
                 if (!pointExists(newPoint)) {
                     list_points.push(newPoint);
                     string_points += "[" + newPoint[0] + ", " + newPoint[1] + "],";
-                    copyTextToClipboard(string_points);
+                    copyTextToClipboard(newPoint);
 
                     // Draw the line if there are at least two points
                     if (list_points.length > 1) {
