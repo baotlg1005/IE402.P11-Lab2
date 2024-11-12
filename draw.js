@@ -142,6 +142,47 @@ function Draw() {
         have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
         have_filled_outline = true // mặt đáy và nắp có viền đen hay không
     )
+
+    // tường phía tây - thư viện
+    mainWallWestPoints = [
+        [106.80307679406697, 10.87080312815038, 30],
+        [106.80311635664893, 10.870841980777332, 30],
+        [106.80319279960389, 10.870766251076052, 30],
+        [106.8031545781264, 10.870727398439241, 30],
+    ]
+
+    centroid = GetCentroid(mainWallWestPoints); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + floorHeight
+    ] // cộng thêm chiều cao của nền vào tọa độ trung tâm - nói cách khác là nâng tường lên 1 đơn vị để tường không bị chồng lên nền
+
+    mainWallWestPoints = MovePolygon(
+        listPoints = mainWallWestPoints,
+        newCenter = centroid
+    ); // di chuyển tường về trung tâm mới
+
+    //vẽ các mặt tường
+    [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
+        bottomPoints = mainWallWestPoints,
+        height = wallHeight,
+        color = wallColor,
+        filled = true,
+        have_outline = true,
+        have_filled_outline = true
+    )
+
+    // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
+    RenderWindowOnWallFace(
+        facePoints = westFacePoint,
+        windowBottomLeftPoint = [10, 10],
+        windowTopRightPoint = [20, 20],
+        unit = 100,
+        windowColor = [255, 255, 0]
+    )
+
+
     //#endregion
 
     //#region Đường nối
