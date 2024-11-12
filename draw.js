@@ -22,7 +22,7 @@ let centroid; // trung tâm của đa giác
 let height;
 
 function Draw() {
- 
+
     //#region Toà chính
 
     //nền toà chính
@@ -91,26 +91,100 @@ function Draw() {
     )
 
     // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
-    RenderWindowOnWallFace(
-        facePoints = westFacePoint,
-        windowBottomLeftPoint = [10, 10],
-        windowTopRightPoint = [20, 20],
-        unit = 100,
-        windowColor = [255, 255, 0]
-    )
+    const drawLongWallWindowFloor = (elevation, windowWidth, windowHeight, unit, facePoint) => {
+        let gap = (unit - 8*windowWidth)/4
+        let xWindow = gap;
+        let yWindow = elevation;
+
+        for (let i = 0; i < 3; i++) {
+            RenderWindowOnWallFace(
+                facePoints = facePoint,
+                windowBottomLeftPoint = [yWindow, xWindow],
+                windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+                unit = 100,
+                windowColor = [255, 255, 0]
+            )
+
+            xWindow += windowWidth;
+        }
+
+        xWindow += gap;
+        for (let i = 0; i < 2; i++) {
+            RenderWindowOnWallFace(
+                facePoints = facePoint,
+                windowBottomLeftPoint = [yWindow, xWindow],
+                windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+                unit = 100,
+                windowColor = [255, 255, 0]
+            )
+
+            xWindow += windowWidth;
+        }
+
+        xWindow += gap;
+        for (let i = 0; i < 3; i++) {
+            RenderWindowOnWallFace(
+                facePoints = facePoint,
+                windowBottomLeftPoint = [yWindow, xWindow],
+                windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+                unit = 100,
+                windowColor = [255, 255, 0]
+            )
+
+            xWindow += windowWidth;
+        }
+    }
+
+    const drawShortWallWindowFloor = (elevation, windowWidth, windowHeight, unit, facePoint) => {
+        let gap = (unit - 3*windowWidth)/2
+        let xWindow = gap;
+        let yWindow = elevation;
+
+        for (let i = 0; i < 3; i++) {
+            RenderWindowOnWallFace(
+                facePoints = facePoint,
+                windowBottomLeftPoint = [yWindow, xWindow],
+                windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+                unit = 100,
+                windowColor = [255, 255, 0]
+            )
+
+            xWindow += windowWidth;
+        }
+    }
+
+    drawLongWallWindowFloor(10, 10, 10, 100, westFacePoint)
+
+    drawLongWallWindowFloor(40, 10, 8, 100, westFacePoint)
+
+    drawLongWallWindowFloor(70, 10, 10, 100, westFacePoint)
+
+    drawShortWallWindowFloor(10, 28, 10, 100, northFacePoint)
+
+    drawShortWallWindowFloor(40, 28, 8, 100, northFacePoint)
+
+    drawShortWallWindowFloor(70, 28, 10, 100, northFacePoint)
+
+    drawShortWallWindowFloor(10, 28, 10, 100, southFacePoint)
+
+    drawShortWallWindowFloor(40, 28, 8, 100, southFacePoint)
+
+    drawShortWallWindowFloor(70, 28, 10, 100, southFacePoint)
+
+    /////
 
     //thêm cửa sổ vào mặt tường phía bắc
-    RenderWindowOnWallFace(
-        facePoints = northFacePoint,
-        windowBottomLeftPoint = [10, 10],
-        windowTopRightPoint = [20, 20],
-        unit = 100,
-        windowColor = [255, 255, 0]
-    )
-    
+    // RenderWindowOnWallFace(
+    //     facePoints = northFacePoint,
+    //     windowBottomLeftPoint = [10, 10],
+    //     windowTopRightPoint = [20, 20],
+    //     unit = 100,
+    //     windowColor = [255, 255, 0]
+    // )
+
 
     //#endregion
-    
+
     //#region Toà thư viện
     let libraryListPoints = [
         [106.80288568667955, 10.870770202191375, 30],
