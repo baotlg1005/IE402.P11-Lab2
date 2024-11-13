@@ -27,9 +27,9 @@
 
 	<script>
 
-		
+		let mview;
 
-		Draw();
+		Render();
 
 		console.log(jsondata);
 
@@ -51,11 +51,11 @@
 				container: "viewDiv",
 				map: map,
 				camera: {
-					position: [106.80297125182865, 10.870307686546687, 300],
-					heading: 10,
-					tilt: 60
+					position: [106.80226887464666, 10.871045829514076, 64.97129604406655], heading: 128.39578097430217, tilt: 75.14149746414613
 				}
 			});
+
+			mview = view;
 			var createGraphic = function (data) {
 				return new Graphic({
 					geometry: data,
@@ -79,6 +79,14 @@
 
 			setupGetPoint(view, graphicsLayer);
 		});
+
+		function GetCameraPos() {
+			let pos = mview.camera.position;
+			//change pos to lat, long
+			let lat = pos.latitude;
+			let long = pos.longitude;
+			console.log("position: [" + long + ", " + lat + ", " + pos.z + "], heading: " + mview.camera.heading + ", tilt: " + mview.camera.tilt);
+		}
 
 	</script>
 </head>

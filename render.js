@@ -95,12 +95,16 @@ function RenderRoundCylinder(center, radius, height, color = [0, 0, 0], filled =
     RenderCylindner(bottomPoints, height, color, filled, have_outline, have_filled_outline);
 }
 
-function RenderCylindner(bottomPoints, height, color = [0, 0, 0], filled = false, have_outline = false, have_filled_outline = false) {
+function RenderCylindner(bottomPoints, height, color = [0, 0, 0], filled = false, have_outline = false, have_filled_outline = false, removeFace = []) {
 
 
     let topPoints = [];
 
     for (let i = bottomPoints.length - 1; i > 0; i--) {
+
+        if (removeFace.includes(i)) {
+            continue;
+        }
 
         let firstBottomPoint = bottomPoints[i];
         let secondBottomPoint = bottomPoints[i - 1];
@@ -156,26 +160,6 @@ function RenderWall(bottomPoints, height, color = [0, 0, 0], filled = false, hav
             bottomPoints[i][2] + height
         ]);
     }
-
-    RenderPoint(
-        bottomPoints[0],
-        [255, 0, 0]
-    );
-
-    RenderPoint(
-        bottomPoints[1],
-        [255, 255, 255]
-    );
-
-    RenderPoint(
-        bottomPoints[2],
-        [0, 0, 255]
-    );
-
-    RenderPoint(
-        bottomPoints[3],
-        [0, 0, 0]
-    );
 
     let northFacePoint = [
         bottomPoints[0],
@@ -233,6 +217,21 @@ function RenderWall(bottomPoints, height, color = [0, 0, 0], filled = false, hav
     }
 
     return [northFacePoint, eastFacePoint, southFacePoint, westFacePoint];
+}
+
+function RenderWallFace(bottomPoints, height, color = [0, 0, 0], filled = false, have_outline = false, have_filled_outline = false) {
+    //bottomPoint only have 2 points
+
+    let facePoints = [
+        bottomPoints[0],
+        bottomPoints[1],
+        [bottomPoints[1][0], bottomPoints[1][1], bottomPoints[1][2] + height],
+        [bottomPoints[0][0], bottomPoints[0][1], bottomPoints[0][2] + height],
+    ]
+
+    RenderPolygon(facePoints, color, have_outline);
+
+    return facePoints;
 }
 
 function RenderWindowOnWallFace(facePoints, windowBottomLeftPoint, windowTopRightPoint, unit, windowColor = [255, 255, 255]) {
@@ -314,4 +313,122 @@ function RenderWindowOnWallFace(facePoints, windowBottomLeftPoint, windowTopRigh
     let bottomPoints = SplitToBottomPoint(windowPoints);
 
     RenderCylindner(bottomPoints, height, windowColor, true, true, true);
+}
+
+const drawLongWallWindowFloor = (elevation, windowWidth, windowHeight, unit, facePoint, windowColor) => {
+    let gap = (unit - 8*windowWidth)/4
+    let xWindow = gap;
+    let yWindow = elevation;
+
+    for (let i = 0; i < 3; i++) {
+        RenderWindowOnWallFace(
+            facePoints = facePoint,
+            windowBottomLeftPoint = [yWindow, xWindow],
+            windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+            unit = 100,
+            windowColor = windowColor
+        )
+
+        xWindow += windowWidth;
+    }
+
+    xWindow += gap;
+    for (let i = 0; i < 2; i++) {
+        RenderWindowOnWallFace(
+            facePoints = facePoint,
+            windowBottomLeftPoint = [yWindow, xWindow],
+            windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+            unit = 100,
+            windowColor = windowColor
+        )
+
+        xWindow += windowWidth;
+    }
+
+    xWindow += gap;
+    for (let i = 0; i < 3; i++) {
+        RenderWindowOnWallFace(
+            facePoints = facePoint,
+            windowBottomLeftPoint = [yWindow, xWindow],
+            windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+            unit = 100,
+            windowColor = windowColor
+        )
+
+        xWindow += windowWidth;
+    }
+}
+
+const drawShortWallWindowFloor = (elevation, windowWidth, windowHeight, unit, facePoint, windowColor) => {
+    let gap = (unit - 3*windowWidth)/2
+    let xWindow = gap;
+    let yWindow = elevation;
+
+    for (let i = 0; i < 3; i++) {
+        RenderWindowOnWallFace(
+            facePoints = facePoint,
+            windowBottomLeftPoint = [yWindow, xWindow],
+            windowTopRightPoint = [yWindow + windowHeight, xWindow + windowWidth],
+            unit = 100,
+            windowColor = windowColor
+        )
+
+        xWindow += windowWidth;
+    }
+}
+
+function RenderRailing(firstPoint, secondPoint, height, weight, railCount, color){
+
+    let bottomPoints = LineToPolygon(firstPoint, secondPoint, 0.000001);
+    let midPoints = bottomPoints.map(point => [point[0], point[1], point[2] + height/2]);
+    let topPoints = bottomPoints.map(point => [point[0], point[1], point[2] + height]);
+
+    RenderCylindner(bottomPoints, weight, color, true, true, true);
+    RenderCylindner(midPoints, weight, color, true, true, true);
+    RenderCylindner(topPoints, weight, color, true, true, true);
+
+    
+}
+
+function LineToPolygon(firstPoint, secondPoint, width) {
+    let normalVector = [
+        secondPoint[1] - firstPoint[1],
+        firstPoint[0] - secondPoint[0],
+    ]
+
+    let length = Math.sqrt(normalVector[0] * normalVector[0] + normalVector[1] * normalVector[1]);
+
+    normalVector[0] /= length;
+    normalVector[1] /= length;
+
+    let bottomPoints = [];
+
+    bottomPoints.push([
+        firstPoint[0] + normalVector[0] * width,
+        firstPoint[1] + normalVector[1] * width,
+        firstPoint[2],
+    ]);
+
+    bottomPoints.push([
+        secondPoint[0] + normalVector[0] * width,
+        secondPoint[1] + normalVector[1] * width,
+        secondPoint[2],
+    ]);
+
+    bottomPoints.push([
+        secondPoint[0] - normalVector[0] * width,
+        secondPoint[1] - normalVector[1] * width,
+        secondPoint[2],
+    ]);
+
+    bottomPoints.push([
+        firstPoint[0] - normalVector[0] * width,
+        firstPoint[1] - normalVector[1] * width,
+        firstPoint[2],
+    ]);
+
+    bottomPoints.push(bottomPoints[0]);
+
+    return bottomPoints;
+
 }
