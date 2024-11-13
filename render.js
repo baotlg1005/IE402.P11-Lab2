@@ -290,29 +290,28 @@ function RenderWindowOnWallFace(facePoints, windowBottomLeftPoint, windowTopRigh
 
     let normalVector = GetNormalVector(facePoints);
 
-    let bottomPoints = [
-        [
-            windowPoints[0][0] + normalVector[0] * 0.000001,
-            windowPoints[0][1] + normalVector[1] * 0.000001,
-            windowPoints[0][2] + normalVector[2] * 0.000001,
-        ],
-        [
-            windowPoints[1][0] + normalVector[0] * 0.000001,
-            windowPoints[1][1] + normalVector[1] * 0.000001,
-            windowPoints[1][2] + normalVector[2] * 0.000001,
-        ],
-        [
-            windowPoints[1][0] - normalVector[0] * 0.000001,
-            windowPoints[1][1] - normalVector[1] * 0.000001,
-            windowPoints[1][2] - normalVector[2] * 0.000001,
-        ],
-        [
-            windowPoints[0][0] - normalVector[0] * 0.000001,
-            windowPoints[0][1] - normalVector[1] * 0.000001,
-            windowPoints[0][2] - normalVector[2] * 0.000001,
-        ],
-    ]
+    function SplitToBottomPoint(windowPoints){
+        let bottomPoints = [];
+        for (let i = 0; i < windowPoints.length; i++) {
+            bottomPoints.push([
+                windowPoints[i][0]+ normalVector[0] * 0.000001,
+                windowPoints[i][1]+ normalVector[1] * 0.000001,
+                windowPoints[i][2] + normalVector[2] * 0.000001,
+            ]);
+        }
+
+        for (let i = windowPoints.length - 1; i >= 0; i--) {
+            bottomPoints.push([
+                windowPoints[i][0] - normalVector[0] * 0.000001,
+                windowPoints[i][1] - normalVector[1] * 0.000001,
+                windowPoints[i][2] - normalVector[2] * 0.000001,
+            ]);
+        }
+
+        return bottomPoints;
+    }
+    
+    let bottomPoints = SplitToBottomPoint(windowPoints);
 
     RenderCylindner(bottomPoints, height, windowColor, true, true, true);
-
 }
