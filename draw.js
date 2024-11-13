@@ -173,15 +173,57 @@ function Draw() {
         have_filled_outline = true
     )
 
-    // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
-    RenderWindowOnWallFace(
-        facePoints = westFacePoint,
-        windowBottomLeftPoint = [10, 10],
-        windowTopRightPoint = [20, 20],
-        unit = 100,
-        windowColor = [255, 255, 0]
-    )
+    // // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
+    // RenderWindowOnWallFace(
+    //     facePoints = westFacePoint,
+    //     windowBottomLeftPoint = [10, 10],
+    //     windowTopRightPoint = [20, 20],
+    //     unit = 100,
+    //     windowColor = [255, 255, 0]
+    // )
 
+    // Function to draw multiple layers of windows with given spacing and elevations
+    const drawWallWindows = (elevations, numWindowsPerLayer, windowWidth, windowHeight, unit, facePoint, rows, cols) => {
+        // Đảm bảo elevations là một mảng
+        elevations = Array.isArray(elevations) ? elevations : [elevations];
+
+        let gap = (unit - numWindowsPerLayer * windowWidth) / (numWindowsPerLayer + 1);
+
+        // Lặp qua mỗi độ cao trong elevations để vẽ các lớp cửa sổ
+        elevations.forEach(yWindow => {
+            let xWindow = gap; // Bắt đầu với khoảng cách ban đầu
+
+            // Vẽ các cửa sổ trên lớp ở độ cao này
+            for (let i = 0; i < numWindowsPerLayer; i++) {
+                // Vòng lặp cho các hàng và cột của sub-windows
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        let subWindowWidth = windowWidth / cols;
+                        let subWindowHeight = windowHeight / rows;
+                        let subWindowX = xWindow + col * subWindowWidth;
+                        let subWindowY = yWindow + row * subWindowHeight;
+
+                        RenderWindowOnWallFace(
+                            facePoint = facePoint,
+                            windowBottomLeftPoint = [subWindowY, subWindowX],
+                            windowTopRightPoint = [subWindowY + subWindowHeight, subWindowX + subWindowWidth],
+                            unit = 100,
+                            windowColor = [255, 255, 0]
+                        );
+                    }
+                }
+
+                // Di chuyển đến vị trí tiếp theo cho cửa sổ tiếp theo
+                xWindow += windowWidth + gap;
+            }
+        });
+    };
+
+
+    drawWallWindows(5, 3, 30, 30, 100, eastFacePoint, 2, 3); // Chia mỗi cửa sổ thành 2 hàng, 3 cột
+    drawWallWindows(55, 3, 30, 25, 100, eastFacePoint, 2, 2);
+    drawWallWindows([10, 60], 2, 40, 15, 100, northFacePoint, 2, 2);
+    drawWallWindows([10, 60], 2, 40, 15, 100, southFacePoint, 2, 2);
 
     //#endregion
 
