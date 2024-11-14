@@ -136,6 +136,7 @@ function RenderCylindner(bottomPoints, height, color = [0, 0, 0], filled = false
         RenderPolyline([...bottomPoints, bottomPoints[0]], [0, 0, 0]);
         RenderPolyline([...topPoints, topPoints[0]], [0, 0, 0]);
     }
+
 }
 
 function RenderWall(bottomPoints, height, color = [0, 0, 0], filled = false, have_outline = false, have_filled_outline = false) {
@@ -431,4 +432,24 @@ function LineToPolygon(firstPoint, secondPoint, width) {
 
     return bottomPoints;
 
+}
+
+function RenderWindowAtLine(startPoint, endPoint, height, ratio, color){
+
+    //set start point and end point to new pos to fit with width
+    startPoint = [
+        startPoint[0] + (endPoint[0] - startPoint[0]) * ratio / 2,
+        startPoint[1] + (endPoint[1] - startPoint[1]) * ratio / 2,
+        startPoint[2]
+    ]
+
+    endPoint = [
+        endPoint[0] - (endPoint[0] - startPoint[0]) * ratio / 2,
+        endPoint[1] - (endPoint[1] - startPoint[1]) * ratio / 2,
+        endPoint[2]
+    ]
+
+    let bottomPoints = LineToPolygon(startPoint, endPoint, 0.000001);
+
+    RenderCylindner(bottomPoints, height, color, true, true, true);
 }

@@ -19,7 +19,8 @@
 
 	<link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
 	<script src="https://js.arcgis.com/4.29/"></script>
-	
+
+
 	<script src="utils.js"></script>
 	<script src="render.js"></script>
 	<script src="draw.js"></script>
@@ -27,66 +28,61 @@
 
 	<script>
 
-		let mview;
-
-		Render();
-
-		console.log(jsondata);
-
 		require([
 			"esri/Map",
 			"esri/views/SceneView",
-			"esri/layers/GraphicsLayer",
-			"esri/Graphic",
-		], function (
-			Map, SceneView, GraphicsLayer, Graphic
-		) {
+			"esri/layers/GeoJSONLayer",
+			"esri/layers/SceneLayer", "esri/layers/GraphicsLayer", "esri/Graphic", "esri/request"
+		], function (Map, SceneView, GeoJSONLayer, SceneLayer,
+			GraphicsLayer, Graphic, esriRequest) {
+			var createGraphic = function (data) {
+				return new Graphic({
+					geometry: data,
+					symbol: data.symbol,
+					attributes: data,
+					popupTemplate: data.popupTemplate
+				});
+			};
 
+			const json_options = {
+				query: {
+					f: "json"
+				},
+				responseType: "json"
+			};
+			// request json
+			esriRequest('./data.json', json_options).then(function (response) {
+				var graphicsLayer = new GraphicsLayer();
+				console.log(response.data);
+
+				response.data.points.forEach(function (data) {
+					graphicsLayer.add(createGraphic(data));
+				});
+				response.data.polygons.forEach(function (data) {
+					graphicsLayer.add(createGraphic(data));
+				});
+				response.data.polyline.forEach(function (data) {
+					graphicsLayer.add(createGraphic(data));
+				});
+
+				map.add(graphicsLayer);
+
+			});
 			const map = new Map({
 				basemap: "topo-vector",
-				ground: "world-elevation"
+				ground: "world-elevation",
 			});
 
 			const view = new SceneView({
 				container: "viewDiv",
 				map: map,
 				camera: {
-					position: [106.80226887464666, 10.871045829514076, 64.97129604406655], heading: 128.39578097430217, tilt: 75.14149746414613
+					position: [106.80207397893798, 10.871543162573994, 80.31589805800468], heading: 142.72266389674246, tilt: 78.91603271694275
 				}
 			});
 
-			mview = view;
-			var createGraphic = function (data) {
-				return new Graphic({
-					geometry: data,
-					symbol: data.symbol,
-					attributes: data,
-				});
-			};
-			var graphicsLayer = new GraphicsLayer();
-
-			jsondata.points.forEach(function (data) {
-				graphicsLayer.add(createGraphic(data));
-			});
-			jsondata.polygons.forEach(function (data) {
-				graphicsLayer.add(createGraphic(data));
-			});
-			jsondata.polyline.forEach(function (data) {
-                graphicsLayer.add(createGraphic(data));
-            });
-
-			map.add(graphicsLayer);
-
-			setupGetPoint(view, graphicsLayer);
+			view.popup.defaultPopupTemplateEnabled = true;
 		});
-
-		function GetCameraPos() {
-			let pos = mview.camera.position;
-			//change pos to lat, long
-			let lat = pos.latitude;
-			let long = pos.longitude;
-			console.log("position: [" + long + ", " + lat + ", " + pos.z + "], heading: " + mview.camera.heading + ", tilt: " + mview.camera.tilt);
-		}
 
 	</script>
 </head>

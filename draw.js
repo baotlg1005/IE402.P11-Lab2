@@ -1,3 +1,4 @@
+
 let jsondata = {
     points: [
     ],
@@ -68,16 +69,20 @@ let height;
 
 let mainCentroid; // trung tâm của toà chính
 
+function SaveToJson() {
+    const jsonString = JSON.stringify(jsondata, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'data.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
 function Render() {
-
     DrawMainBuilding();
-
     DrawLibrary();
-
     DrawConnector();
-
-
-
 }
 
 function DrawMainBuilding() {
@@ -122,9 +127,7 @@ function DrawMainBuilding() {
     )
 
     RenderMainBuildingWalls();
-
     RenderCenterStructure(mainListPoints, mainCentroid);
-
 
     //#region sàn tầng 2
     let secondFloorListPoints = mainListPoints.slice()
@@ -419,7 +422,7 @@ function DrawMainBuilding() {
     let auditoriumListPoints = GenerateCircleWithRadius(
         center = auditoriumcentroid,
         radius = auditoriumRadius,
-        numPoints = 20
+        numPoints = 10
     )
 
     RenderCylindner(
@@ -469,7 +472,7 @@ function DrawMainBuilding() {
     let centerListPoints = GenerateCircleWithRadius(
         center = centercentroid,
         radius = centerRadius,
-        numPoints = 20
+        numPoints = 10
     )
 
     RenderCylindner(
@@ -564,9 +567,9 @@ function RenderMainBuildingWalls() {
     drawLongWallWindowFloor(40, 10, 8, 100, eastFacePoint, windowColor)
     drawLongWallWindowFloor(70, 10, 10, 100, eastFacePoint, windowColor)
 
-    drawShortWallWindowFloor(10, 28, 10, 100, northFacePoint, windowColor)
-    drawShortWallWindowFloor(40, 28, 8, 100, northFacePoint, windowColor)
-    drawShortWallWindowFloor(70, 28, 10, 100, northFacePoint, windowColor)
+    // drawShortWallWindowFloor(10, 28, 10, 100, northFacePoint, windowColor)
+    // drawShortWallWindowFloor(40, 28, 8, 100, northFacePoint, windowColor)
+    // drawShortWallWindowFloor(70, 28, 10, 100, northFacePoint, windowColor)
 
     drawShortWallWindowFloor(10, 28, 10, 100, southFacePoint, windowColor)
     drawShortWallWindowFloor(40, 28, 8, 100, southFacePoint, windowColor)
@@ -614,9 +617,9 @@ function RenderMainBuildingWalls() {
     drawShortWallWindowFloor(40, 28, 8, 100, northFacePoint, windowColor)
     drawShortWallWindowFloor(70, 28, 10, 100, northFacePoint, windowColor)
 
-    drawShortWallWindowFloor(10, 28, 10, 100, southFacePoint, windowColor)
-    drawShortWallWindowFloor(40, 28, 8, 100, southFacePoint, windowColor)
-    drawShortWallWindowFloor(70, 28, 10, 100, southFacePoint, windowColor)
+    // drawShortWallWindowFloor(10, 28, 10, 100, southFacePoint, windowColor)
+    // drawShortWallWindowFloor(40, 28, 8, 100, southFacePoint, windowColor)
+    // drawShortWallWindowFloor(70, 28, 10, 100, southFacePoint, windowColor)
 
     //#endregion
 
@@ -696,6 +699,22 @@ function RenderCenterStructure(mainListPoints, mainCentroid) {
     bottomLeftStructureListPoint = AddPointToSquare(TopLeftSquare, bottomLeftStructureListPoint, [95, 5])
     bottomLeftStructureListPoint = AddPointToSquare(TopLeftSquare, bottomLeftStructureListPoint, [5, 5])
 
+    RenderWindowAtLine(
+        bottomLeftStructureListPoint[2],
+        bottomLeftStructureListPoint[3],
+        2,
+        0.5,
+        windowColor
+    )
+
+    RenderWindowAtLine(
+        bottomLeftStructureListPoint[4],
+        bottomLeftStructureListPoint[5],
+        2,
+        0.5,
+        windowColor
+    )
+
     let topLeftStructureListPoint = [];
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [5, 5])
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [5, 95])
@@ -705,6 +724,22 @@ function RenderCenterStructure(mainListPoints, mainCentroid) {
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [95, 60])
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [95, 5])
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [5, 5])
+
+    RenderWindowAtLine(
+        topLeftStructureListPoint[2],
+        topLeftStructureListPoint[3],
+        2,
+        0.5,
+        windowColor
+    )
+
+    RenderWindowAtLine(
+        topLeftStructureListPoint[4],
+        topLeftStructureListPoint[5],
+        2,
+        0.5,
+        windowColor
+    )
 
     let bottomRightStructureListPoint = [];
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [5, 5])
@@ -716,6 +751,22 @@ function RenderCenterStructure(mainListPoints, mainCentroid) {
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [5, 95])
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [5, 5])
 
+    RenderWindowAtLine(
+        bottomRightStructureListPoint[2],
+        bottomRightStructureListPoint[3],
+        2,
+        0.5,
+        windowColor
+    )
+
+    RenderWindowAtLine(
+        bottomRightStructureListPoint[4],
+        bottomRightStructureListPoint[5],
+        2,
+        0.5,
+        windowColor
+    )
+
     let topRightStructureListPoint = [];
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [5, 5])
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [95, 5])
@@ -725,6 +776,22 @@ function RenderCenterStructure(mainListPoints, mainCentroid) {
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [60, 95])
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [5, 95])
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [5, 5])
+
+    RenderWindowAtLine(
+        topRightStructureListPoint[2],
+        topRightStructureListPoint[3],
+        2,
+        0.5,
+        windowColor
+    )
+
+    RenderWindowAtLine(
+        topRightStructureListPoint[4],
+        topRightStructureListPoint[5],
+        2,
+        0.5,
+        windowColor
+    )
 
     RenderCylindner(
         bottomPoints = bottomLeftStructureListPoint,
@@ -795,7 +862,7 @@ function DrawLibrary() {
         have_filled_outline = true // mặt đáy và nắp có viền đen hay không
     )
 
-    DrawLibraryWall();
+    DrawLibraryWall(libraryListPoints);
 
     //#region trần nhà
     let ceilingPointList = libraryListPoints.slice()
@@ -832,7 +899,7 @@ function DrawLibrary() {
     let centerListPoints = GenerateCircleWithRadius(
         center = centercentroid,
         radius = centerRadius,
-        numPoints = 20
+        numPoints = 10
     )
 
     RenderCylindner(
@@ -851,9 +918,9 @@ function DrawLibrary() {
 
 }
 
-function DrawLibraryWall() {
+function DrawLibraryWall(libraryListPoints) {
 
-    const drawWallWindows = (elevations, numWindowsPerLayer, windowWidth, windowHeight, unit, facePoint, rows, cols) => {
+    const drawWallWindows = (elevations, numWindowsPerLayer, windowWidth, windowHeight, unit, facePoint, rows, cols, color) => {
         // Đảm bảo elevations là một mảng
         elevations = Array.isArray(elevations) ? elevations : [elevations];
 
@@ -878,7 +945,7 @@ function DrawLibraryWall() {
                             windowBottomLeftPoint = [subWindowY, subWindowX],
                             windowTopRightPoint = [subWindowY + subWindowHeight, subWindowX + subWindowWidth],
                             unit = 100,
-                            windowColor = [255, 255, 0]
+                            windowColor = color
                         );
                     }
                 }
@@ -888,6 +955,86 @@ function DrawLibraryWall() {
             }
         });
     };
+
+    let westNorthFacePoint = RenderWallFace(
+        [
+            [
+                libraryListPoints[2][0],
+                libraryListPoints[2][1],
+                libraryListPoints[2][2] + floorHeight
+            ],
+            [
+                libraryListPoints[3][0],
+                libraryListPoints[3][1],
+                libraryListPoints[3][2] + floorHeight
+            ]
+        ]
+        , libraryWallHeight, wallColor
+    )
+    drawWallWindows([10, 60], 2, 30, 12, 100, westNorthFacePoint, 2, 2, color = windowColor)
+
+    let westSouthFacePoint = RenderWallFace(
+        [
+            [
+                libraryListPoints[6][0],
+                libraryListPoints[6][1],
+                libraryListPoints[6][2] + floorHeight
+            ],
+            [
+                libraryListPoints[7][0],
+                libraryListPoints[7][1],
+                libraryListPoints[7][2] + floorHeight
+            ]
+        ]
+        , libraryWallHeight, wallColor
+    )
+    drawWallWindows([10, 60], 2, 30, 12, 100, westSouthFacePoint, 2, 2, color = windowColor)
+
+    let eastSouthFacePoint = RenderWallFace(
+        [
+            [
+                libraryListPoints[10][0],
+                libraryListPoints[10][1],
+                libraryListPoints[10][2] + floorHeight
+            ],
+            [
+                libraryListPoints[11][0],
+                libraryListPoints[11][1],
+                libraryListPoints[11][2] + floorHeight
+            ]
+        ]
+        , libraryWallHeight, wallColor
+    )
+    RenderWindowOnWallFace(
+        eastSouthFacePoint, [0, 10], [20, 50], 100, windowColor
+    )
+    RenderWindowOnWallFace(
+        eastSouthFacePoint, [0, 50], [20, 90], 100, windowColor
+    )
+
+    let eastNorthFacePoint = RenderWallFace(
+        [
+            [
+                libraryListPoints[14][0],
+                libraryListPoints[14][1],
+                libraryListPoints[14][2] + floorHeight
+            ],
+            [
+                libraryListPoints[15][0],
+                libraryListPoints[15][1],
+                libraryListPoints[15][2] + floorHeight
+            ]
+        ]
+        , libraryWallHeight, wallColor
+    )
+    drawWallWindows([10, 60], 2, 30, 12, 100, eastNorthFacePoint, 2, 2, color = windowColor)
+
+
+
+
+    //#region main wall
+
+
 
     mainWallWestPoints = [
         [106.80307679406697, 10.87080312815038, 30],
@@ -918,10 +1065,10 @@ function DrawLibraryWall() {
         have_filled_outline = true
     )
 
-    drawWallWindows(5, 4, 20, 30, 100, eastFacePoint, 2, 2); // Chia mỗi cửa sổ thành 2 hàng, 3 cột
-    drawWallWindows(60, 2, 30, 12, 100, eastFacePoint, 2, 2);
-    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2);
-    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2);
+    drawWallWindows(5, 4, 20, 30, 100, eastFacePoint, 2, 2, color = windowColor); // Chia mỗi cửa sổ thành 2 hàng, 3 cột
+    drawWallWindows(60, 2, 30, 12, 100, eastFacePoint, 2, 2, color = windowColor);
+    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2, color = windowColor);
+    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2, color = windowColor);
 
 
     mainWallNorthPoints = [
@@ -948,25 +1095,12 @@ function DrawLibraryWall() {
         have_outline = true,
         have_filled_outline = true
     )
-    
-    
-    drawWallWindows([10, 60], 2, 40, 12, 100, westFacePoint, 2, 2);
-    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2);
-    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2);
 
 
-    // // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
-    // RenderWindowOnWallFace(
-    //     facePoints = westFacePoint,
-    //     windowBottomLeftPoint = [10, 10],
-    //     windowTopRightPoint = [20, 20],
-    //     unit = 100,
-    //     windowColor = [255, 255, 0]
-    // )
+    drawWallWindows([10, 60], 2, 40, 12, 100, westFacePoint, 2, 2, color = windowColor);
+    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2, color = windowColor);
+    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2, color = windowColor);
 
-    // Function to draw multiple layers of windows with given spacing and elevations
-    
-    
 
     mainWallEastPoints = [
         [106.80300410578818, 10.870573103535934, 30],
@@ -996,9 +1130,9 @@ function DrawLibraryWall() {
         have_outline = true,
         have_filled_outline = true
     )
-    drawWallWindows([10, 60], 1, 40, 12, 100, westFacePoint, 2, 2);
-    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2);
-    
+    drawWallWindows([10, 60], 1, 40, 12, 100, westFacePoint, 2, 2, color = windowColor);
+    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2, color = windowColor);
+
 
     mainWallSouthPoints = [
         [106.80315591923087, 10.870648376111486, 30],
@@ -1025,45 +1159,14 @@ function DrawLibraryWall() {
         have_outline = true,
         have_filled_outline = true
     )
-    
-    
-    drawWallWindows([10, 60], 2, 40, 12, 100, eastFacePoint, 2, 2);
-    
-    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2);
-
-   
-    
 
 
-    wallPoints1 = [[106.80292644898286, 10.870648963733922, 30], 
-    [106.80292701358562, 10.870731481778677, 30],
-    [106.80292701358562, 10.870731481778677, 50],
-    [106.80292644898286, 10.870648963733922, 50],
-    [106.80292644898286, 10.870648963733922, 30]
- ]
-    RenderPolygon(wallPoints1, wallColor, false)
+    drawWallWindows([10, 60], 2, 40, 12, 100, eastFacePoint, 2, 2, color = windowColor);
 
-
+    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2, color = windowColor);
+    //#endregion
 }
 
-    wallPoints2 = [[106.80299431614188, 10.870800494073794, 30],
-    [106.80307679406697, 10.87080312815038, 30],
-    [106.80307679406697, 10.87080312815038, 50],
-    [106.80299431614188, 10.870800494073794, 50],
-    [106.80299431614188, 10.870800494073794, 30]]
-
-    RenderPolygon(wallPoints2, wallColor, false)
-        
-
-
-
-    wallPoints3 = [[106.8031545781264, 10.870727398439241, 30],
-    [106.80315591923087, 10.870648376111486, 30],
-    [106.80315591923087, 10.870648376111486, 50],
-    [106.8031545781264, 10.870727398439241, 50],
-    [106.8031545781264, 10.870727398439241, 30]]
-
-    RenderPolygon(wallPoints3, wallColor, false)
 function DrawConnector() {
     //#region ĐƯỜNG NỐI
     listPoints = [
@@ -1126,6 +1229,7 @@ function DrawConnector() {
         have_filled_outline = false, // mặt đáy và nắp có viền đen hay không
     )
 
+    //tran nha
     let ceilingPoint = listPoints.slice()
     centroid = [
         centroid[0],
@@ -1145,6 +1249,7 @@ function DrawConnector() {
         filled = true, // hình trụ có mặt đáy và nắp hay không
         have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
         have_filled_outline = false, // mặt đáy và nắp có viền đen hay không
+        [9]
     )
 
     //#endregion
