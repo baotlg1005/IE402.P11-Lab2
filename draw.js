@@ -77,7 +77,7 @@ function Render() {
     DrawConnector();
 
 
-    
+
 }
 
 function DrawMainBuilding() {
@@ -109,7 +109,7 @@ function DrawMainBuilding() {
             mainListPoints[8],
             mainListPoints[12]
         ]
-    ); 
+    );
 
     // vẽ nền toà chính
     RenderCylindner(
@@ -124,7 +124,7 @@ function DrawMainBuilding() {
     RenderMainBuildingWalls();
 
     RenderCenterStructure(mainListPoints, mainCentroid);
-    
+
 
     //#region sàn tầng 2
     let secondFloorListPoints = mainListPoints.slice()
@@ -133,7 +133,7 @@ function DrawMainBuilding() {
     centroid = [
         centroid[0],
         centroid[1],
-        centroid[2] + secondFloorZPos 
+        centroid[2] + secondFloorZPos
     ]
 
     secondFloorListPoints = MovePolygon(
@@ -157,8 +157,8 @@ function DrawMainBuilding() {
     //add first point to last
     mainSecondFloorListPoints.push(mainSecondFloorListPoints[0])
 
-    
-    let secondFloorWallListPoints = mainListPoints.slice()    
+
+    let secondFloorWallListPoints = mainListPoints.slice()
 
     //mở rộng sàn tầng 2 để tạo ra mái che
     mainSecondFloorListPoints = ResizePolygon(mainSecondFloorListPoints, 1.1)
@@ -175,7 +175,7 @@ function DrawMainBuilding() {
     //#endregion
 
     //#region tường tầng 2
-    
+
 
     //#region render tường tầng 2
     let topLeftFaceBottomPoints = [
@@ -196,7 +196,7 @@ function DrawMainBuilding() {
     )
 
 
-    let topLeftFacePoint =  RenderWallFace(
+    let topLeftFacePoint = RenderWallFace(
         bottomPoints = topLeftFaceBottomPoints,
         height = secondFloorHeight,
         color = wallColor,
@@ -220,7 +220,7 @@ function DrawMainBuilding() {
         newCenter = faceCenter
     )
 
-    let topRightFacePoint =  RenderWallFace(
+    let topRightFacePoint = RenderWallFace(
         bottomPoints = topRightFaceBottomPoints,
         height = secondFloorHeight,
         color = wallColor,
@@ -245,7 +245,7 @@ function DrawMainBuilding() {
         newCenter = faceCenter
     )
 
-    let bottomLeftFacePoint =  RenderWallFace(
+    let bottomLeftFacePoint = RenderWallFace(
         bottomPoints = bottomLeftFaceBottomPoints,
         height = secondFloorHeight,
         color = wallColor,
@@ -270,7 +270,7 @@ function DrawMainBuilding() {
         newCenter = faceCenter
     )
 
-    let bottomRightFacePoint =  RenderWallFace(
+    let bottomRightFacePoint = RenderWallFace(
         bottomPoints = bottomRightFaceBottomPoints,
         height = secondFloorHeight,
         color = wallColor,
@@ -485,8 +485,8 @@ function DrawMainBuilding() {
 
 }
 
-function RenderMainBuildingWalls(){
-    
+function RenderMainBuildingWalls() {
+
     //#region tường phía tây
     let mainWallWestPoints = [
         [106.80290320156769, 10.870066681167124, 30],
@@ -665,7 +665,7 @@ function RenderMainBuildingWalls(){
 
 }
 
-function RenderCenterStructure(mainListPoints, mainCentroid){
+function RenderCenterStructure(mainListPoints, mainCentroid) {
 
     let firstRadius = GetDistance(mainCentroid, mainListPoints[0]) * 0.5;
     let firstcentroid = [
@@ -696,7 +696,7 @@ function RenderCenterStructure(mainListPoints, mainCentroid){
     bottomLeftStructureListPoint = AddPointToSquare(TopLeftSquare, bottomLeftStructureListPoint, [95, 5])
     bottomLeftStructureListPoint = AddPointToSquare(TopLeftSquare, bottomLeftStructureListPoint, [5, 5])
 
-    let  topLeftStructureListPoint =  [];
+    let topLeftStructureListPoint = [];
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [5, 5])
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [5, 95])
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [60, 95])
@@ -706,7 +706,7 @@ function RenderCenterStructure(mainListPoints, mainCentroid){
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [95, 5])
     topLeftStructureListPoint = AddPointToSquare(TopRightSquare, topLeftStructureListPoint, [5, 5])
 
-    let bottomRightStructureListPoint =  [];
+    let bottomRightStructureListPoint = [];
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [5, 5])
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [95, 5])
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [95, 60])
@@ -716,7 +716,7 @@ function RenderCenterStructure(mainListPoints, mainCentroid){
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [5, 95])
     bottomRightStructureListPoint = AddPointToSquare(BottomLeftSquare, bottomRightStructureListPoint, [5, 5])
 
-    let topRightStructureListPoint =  [];
+    let topRightStructureListPoint = [];
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [5, 5])
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [95, 5])
     topRightStructureListPoint = AddPointToSquare(BottomRightSquare, topRightStructureListPoint, [95, 60])
@@ -763,139 +763,282 @@ function RenderCenterStructure(mainListPoints, mainCentroid){
     )
 }
 
-function DrawLibrary(){
-        //#region TOÀ THƯ VIỆN
-        let libraryListPoints = [
-            [106.80288568667955, 10.870770202191375, 30],
-            [106.80295542411216, 10.870840005220142, 30],
-            [106.80299431614188, 10.870800494073794, 30],
-            [106.80307679406697, 10.87080312815038, 30],
-            [106.80311635664893, 10.870841980777332, 30],
-            [106.80319279960389, 10.870766251076052, 30],
-            [106.8031545781264, 10.870727398439241, 30],
-            [106.80315591923087, 10.870648376111486, 30],
-            [106.80319491772669, 10.87061103626323, 30],
-            [106.80311981587619, 10.870537282062527, 30],
-    
-            [106.80308313689338, 10.870573744828032, 30],
-            [106.80300410578818, 10.870573103535934, 30],
-            [106.8029662240142, 10.870533919611557, 30],
-            [106.80288860085525, 10.870608439127217, 30],
-            [106.80292644898286, 10.870648963733922, 30],
-            [106.80292701358562, 10.870731481778677, 30],
-            [106.80288568667955, 10.870770202191375, 30]
-        ]
-    
-        RenderCylindner(
-            bottomPoints = libraryListPoints,
-            height = floorHeight,
-            color = floorColor,
-            filled = true, // hình trụ có mặt đáy và nắp hay không
-            have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
-            have_filled_outline = true // mặt đáy và nắp có viền đen hay không
-        )
+function DrawLibrary() {
+    //#region TOÀ THƯ VIỆN
+    let libraryListPoints = [
+        [106.80288568667955, 10.870770202191375, 30],
+        [106.80295542411216, 10.870840005220142, 30],
+        [106.80299431614188, 10.870800494073794, 30],
+        [106.80307679406697, 10.87080312815038, 30],
+        [106.80311635664893, 10.870841980777332, 30],
+        [106.80319279960389, 10.870766251076052, 30],
+        [106.8031545781264, 10.870727398439241, 30],
+        [106.80315591923087, 10.870648376111486, 30],
+        [106.80319491772669, 10.87061103626323, 30],
+        [106.80311981587619, 10.870537282062527, 30],
 
-        DrawLibraryWall();
+        [106.80308313689338, 10.870573744828032, 30],
+        [106.80300410578818, 10.870573103535934, 30],
+        [106.8029662240142, 10.870533919611557, 30],
+        [106.80288860085525, 10.870608439127217, 30],
+        [106.80292644898286, 10.870648963733922, 30],
+        [106.80292701358562, 10.870731481778677, 30],
+        [106.80288568667955, 10.870770202191375, 30]
+    ]
 
-        //#region trần nhà
-        let ceilingPointList = libraryListPoints.slice()
-    
-        centroid = GetCentroid(ceilingPointList); // lấy tọa độ trung tâm của nền tường
-        centroid = [
-            centroid[0],
-            centroid[1],
-            centroid[2] + libraryCeilingZPos
-        ]
-    
-        ceilingPointList = MovePolygon(
-            listPoints = ceilingPointList,
-            newCenter = centroid
-        ); // di chuyển tường về trung tâm mới
-    
-        RenderCylindner(
-            bottomPoints = ceilingPointList,
-            height = libraryCeilingHeight,
-            color = ceilingColor,
-            filled = true, // hình trụ có mặt đáy và nắp hay không
-            have_outline = false, // các hình polygon tạo thành hình trụ có viền đen hay không
-            have_filled_outline = true // mặt đáy và nắp có viền đen hay không
-        )
-    
-        let centerRadius = GetDistance(centroid, ceilingPointList[0]) * centerRadiusRatio;
-    
-        let centercentroid = [
-            centroid[0],
-            centroid[1],
-            centroid[2] + libraryCeilingHeight
-        ]
-    
-        let centerListPoints = GenerateCircleWithRadius(
-            center = centercentroid,
-            radius = centerRadius,
-            numPoints = 20
-        )
-    
-        RenderCylindner(
-            bottomPoints = centerListPoints,
-            height = libraryCenterHeight,
-            color = centerColor,
-            filled = true, // hình trụ có mặt đáy và nắp hay không
-            have_outline = false, // các hình polygon tạo thành hình trụ có viền đen hay không
-            have_filled_outline = true // mặt đáy và nắp có viền đen hay không
-        )
-    
-        //#endregion
-    
-    
-        //#endregion
-    
+    RenderCylindner(
+        bottomPoints = libraryListPoints,
+        height = floorHeight,
+        color = floorColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = true // mặt đáy và nắp có viền đen hay không
+    )
+
+    DrawLibraryWall();
+
+    //#region trần nhà
+    let ceilingPointList = libraryListPoints.slice()
+
+    centroid = GetCentroid(ceilingPointList); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + libraryCeilingZPos
+    ]
+
+    ceilingPointList = MovePolygon(
+        listPoints = ceilingPointList,
+        newCenter = centroid
+    ); // di chuyển tường về trung tâm mới
+
+    RenderCylindner(
+        bottomPoints = ceilingPointList,
+        height = libraryCeilingHeight,
+        color = ceilingColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = false, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = true // mặt đáy và nắp có viền đen hay không
+    )
+
+    let centerRadius = GetDistance(centroid, ceilingPointList[0]) * centerRadiusRatio;
+
+    let centercentroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + libraryCeilingHeight
+    ]
+
+    let centerListPoints = GenerateCircleWithRadius(
+        center = centercentroid,
+        radius = centerRadius,
+        numPoints = 20
+    )
+
+    RenderCylindner(
+        bottomPoints = centerListPoints,
+        height = libraryCenterHeight,
+        color = centerColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = false, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = true // mặt đáy và nắp có viền đen hay không
+    )
+
+    //#endregion
+
+
+    //#endregion
+
 }
 
-function DrawLibraryWall(){
-        
-        //#region tường phía tây - thư viện
-        mainWallWestPoints = [
-            [106.80307679406697, 10.87080312815038, 30],
-            [106.80311635664893, 10.870841980777332, 30],
-            [106.80319279960389, 10.870766251076052, 30],
-            [106.8031545781264, 10.870727398439241, 30],
-        ]
+function DrawLibraryWall() {
+
+    const drawWallWindows = (elevations, numWindowsPerLayer, windowWidth, windowHeight, unit, facePoint, rows, cols) => {
+        // Đảm bảo elevations là một mảng
+        elevations = Array.isArray(elevations) ? elevations : [elevations];
+
+        let gap = (unit - numWindowsPerLayer * windowWidth) / (numWindowsPerLayer + 1);
+
+        // Lặp qua mỗi độ cao trong elevations để vẽ các lớp cửa sổ
+        elevations.forEach(yWindow => {
+            let xWindow = gap; // Bắt đầu với khoảng cách ban đầu
+
+            // Vẽ các cửa sổ trên lớp ở độ cao này
+            for (let i = 0; i < numWindowsPerLayer; i++) {
+                // Vòng lặp cho các hàng và cột của sub-windows
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        let subWindowWidth = windowWidth / cols;
+                        let subWindowHeight = windowHeight / rows;
+                        let subWindowX = xWindow + col * subWindowWidth;
+                        let subWindowY = yWindow + row * subWindowHeight;
+
+                        RenderWindowOnWallFace(
+                            facePoint = facePoint,
+                            windowBottomLeftPoint = [subWindowY, subWindowX],
+                            windowTopRightPoint = [subWindowY + subWindowHeight, subWindowX + subWindowWidth],
+                            unit = 100,
+                            windowColor = [255, 255, 0]
+                        );
+                    }
+                }
+
+                // Di chuyển đến vị trí tiếp theo cho cửa sổ tiếp theo
+                xWindow += windowWidth + gap;
+            }
+        });
+    };
+
+    mainWallWestPoints = [
+        [106.80307679406697, 10.87080312815038, 30],
+        [106.80311635664893, 10.870841980777332, 30],
+        [106.80319279960389, 10.870766251076052, 30],
+        [106.8031545781264, 10.870727398439241, 30],
+    ]
+
+    centroid = GetCentroid(mainWallWestPoints); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + floorHeight
+    ] // cộng thêm chiều cao của nền vào tọa độ trung tâm - nói cách khác là nâng tường lên 1 đơn vị để tường không bị chồng lên nền
+
+    mainWallWestPoints = MovePolygon(
+        listPoints = mainWallWestPoints,
+        newCenter = centroid
+    ); // di chuyển tường về trung tâm mới
+
+    //vẽ các mặt tường
+    [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
+        bottomPoints = mainWallWestPoints,
+        height = 20,
+        color = wallColor,
+        filled = true,
+        have_outline = true,
+        have_filled_outline = true
+    )
+
+    drawWallWindows(5, 4, 20, 30, 100, eastFacePoint, 2, 2); // Chia mỗi cửa sổ thành 2 hàng, 3 cột
+    drawWallWindows(60, 2, 30, 12, 100, eastFacePoint, 2, 2);
+    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2);
+    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2);
+
+
+    mainWallNorthPoints = [
+        [106.80292701358562, 10.870731481778677, 30],
+        [106.80288568667955, 10.870770202191375, 30],
+        [106.80295542411216, 10.870840005220142, 30],
+        [106.80299431614188, 10.870800494073794, 30],
+    ]
+    centroid = GetCentroid(mainWallNorthPoints); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + floorHeight
+    ]
+    mainWallNorthPoints = MovePolygon(
+        listPoints = mainWallNorthPoints,
+        newCenter = centroid
+    );
+    [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
+        bottomPoints = mainWallNorthPoints,
+        height = 20,
+        color = wallColor,
+        filled = true,
+        have_outline = true,
+        have_filled_outline = true
+    )
     
-        centroid = GetCentroid(mainWallWestPoints); // lấy tọa độ trung tâm của nền tường
-        centroid = [
-            centroid[0],
-            centroid[1],
-            centroid[2] + floorHeight
-        ] // cộng thêm chiều cao của nền vào tọa độ trung tâm - nói cách khác là nâng tường lên 1 đơn vị để tường không bị chồng lên nền
     
-        mainWallWestPoints = MovePolygon(
-            listPoints = mainWallWestPoints,
-            newCenter = centroid
-        ); // di chuyển tường về trung tâm mới
+    drawWallWindows([10, 60], 2, 40, 12, 100, westFacePoint, 2, 2);
+    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2);
+    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2);
+
+
+    // // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
+    // RenderWindowOnWallFace(
+    //     facePoints = westFacePoint,
+    //     windowBottomLeftPoint = [10, 10],
+    //     windowTopRightPoint = [20, 20],
+    //     unit = 100,
+    //     windowColor = [255, 255, 0]
+    // )
+
+    // Function to draw multiple layers of windows with given spacing and elevations
     
-        //vẽ các mặt tường
-        [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
-            bottomPoints = mainWallWestPoints,
-            height = libraryWallHeight,
-            color = wallColor,
-            filled = true,
-            have_outline = true,
-            have_filled_outline = true
-        )
+    RenderPoint( [106.80315591923087, 10.870648376111486, 30], "red")
+    RenderPoint( [106.8029662240142, 10.870533919611557, 30], "blue")
+    RenderPoint( [106.80288860085525, 10.870608439127217, 30], "black")
+    RenderPoint(   [106.80292644898286, 10.870648963733922, 30], "yellow")
+
+    mainWallEastPoints = [
+        [106.80300410578818, 10.870573103535934, 30],
+        [106.8029662240142, 10.870533919611557, 30],
+        [106.80288860085525, 10.870608439127217, 30],
+        [106.80292644898286, 10.870648963733922, 30],
+    ]
+
+    centroid = GetCentroid(mainWallEastPoints); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + floorHeight
+    ] // cộng thêm chiều cao của nền vào tọa độ trung tâm - nói cách khác là nâng tường lên 1 đơn vị để tường không bị chồng lên nền
+
+    mainWallEastPoints = MovePolygon(
+        listPoints = mainWallEastPoints,
+        newCenter = centroid
+    ); // di chuyển tường về trung tâm mới
+
+    //vẽ các mặt tường
+    [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
+        bottomPoints = mainWallEastPoints,
+        height = 20,
+        color = wallColor,
+        filled = true,
+        have_outline = true,
+        have_filled_outline = true
+    )
+    drawWallWindows([10, 60], 1, 40, 12, 100, westFacePoint, 2, 2);
+    drawWallWindows([10, 60], 1, 50, 12, 100, northFacePoint, 2, 2);
     
-        // thêm cửa sổ vào mặt tường phía tây - cửa sổ có màu vàng
-        RenderWindowOnWallFace(
-            facePoints = westFacePoint,
-            windowBottomLeftPoint = [10, 10],
-            windowTopRightPoint = [20, 20],
-            unit = 100,
-            windowColor = [255, 255, 0]
-        )
-        //#endregion
+
+    mainWallSouthPoints = [
+        [106.80315591923087, 10.870648376111486, 30],
+        [106.80319491772669, 10.87061103626323, 30],
+        [106.80311981587619, 10.870537282062527, 30],
+
+        [106.80308313689338, 10.870573744828032, 30]
+    ]
+    centroid = GetCentroid(mainWallSouthPoints); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + floorHeight
+    ]
+    mainWallSouthPoints = MovePolygon(
+        listPoints = mainWallSouthPoints,
+        newCenter = centroid
+    );
+    [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
+        bottomPoints = mainWallSouthPoints,
+        height = 20,
+        color = wallColor,
+        filled = true,
+        have_outline = true,
+        have_filled_outline = true
+    )
     
+    
+    drawWallWindows([10, 60], 2, 40, 12, 100, eastFacePoint, 2, 2);
+    
+    drawWallWindows([10, 60], 1, 50, 12, 100, southFacePoint, 2, 2);
+
+
+
 }
 
-function DrawConnector(){
+function DrawConnector() {
     //#region ĐƯỜNG NỐI
     listPoints = [
         [106.8028731133926, 10.870490017143165, 30],
