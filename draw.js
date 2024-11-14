@@ -52,6 +52,14 @@ let centerHeight = 1;
 let centerRadiusRatio = 0.4;
 //#endregion
 
+//#region thong so thu vien
+let libraryWallHeight = 20;
+let libraryCeilingZPos = libraryWallHeight + floorHeight;
+let libraryCeilingHeight = 3;
+let libraryCenterHeight = 1;
+
+//#endregion
+
 
 
 let listPoints; // Danh sách các điểm của đa giác
@@ -87,9 +95,6 @@ function Render() {
         [106.80288568667955, 10.870770202191375, 30]
     ]
 
-
-
-
     RenderCylindner(
         bottomPoints = libraryListPoints,
         height = floorHeight,
@@ -99,7 +104,7 @@ function Render() {
         have_filled_outline = true // mặt đáy và nắp có viền đen hay không
     )
 
-    // tường phía tây - thư viện
+    //#region tường phía tây - thư viện
     mainWallWestPoints = [
         [106.80307679406697, 10.87080312815038, 30],
         [106.80311635664893, 10.870841980777332, 30],
@@ -122,7 +127,7 @@ function Render() {
     //vẽ các mặt tường
     [northFacePoint, eastFacePoint, southFacePoint, westFacePoint] = RenderWall(
         bottomPoints = mainWallWestPoints,
-        height = wallHeight,
+        height = libraryWallHeight,
         color = wallColor,
         filled = true,
         have_outline = true,
@@ -137,6 +142,56 @@ function Render() {
         unit = 100,
         windowColor = [255, 255, 0]
     )
+    //#endregion
+
+    //#region trần nhà
+    let ceilingPointList = libraryListPoints.slice()
+
+    centroid = GetCentroid(ceilingPointList); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + libraryCeilingZPos
+    ]
+
+    ceilingPointList = MovePolygon(
+        listPoints = ceilingPointList,
+        newCenter = centroid
+    ); // di chuyển tường về trung tâm mới
+
+    RenderCylindner(
+        bottomPoints = ceilingPointList,
+        height = libraryCeilingHeight,
+        color = ceilingColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = false, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = true // mặt đáy và nắp có viền đen hay không
+    )
+
+    let centerRadius = GetDistance(centroid, libraryListPoints[0]) * centerRadiusRatio;
+
+    let centercentroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + libraryCeilingHeight + libraryCeilingZPos
+    ]
+
+    let centerListPoints = GenerateCircleWithRadius(
+        center = centercentroid,
+        radius = centerRadius,
+        numPoints = 20
+    )
+
+    RenderCylindner(
+        bottomPoints = centerListPoints,
+        height = libraryCenterHeight,
+        color = centerColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = false, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = true // mặt đáy và nắp có viền đen hay không
+    )
+
+    //#endregion
 
 
     //#endregion
@@ -174,12 +229,54 @@ function Render() {
 
     RenderCylindner(
         bottomPoints = listPoints,
-        height = mainStructureHeight + secondFloorHeight + 1,
+        height = mainStructureHeight + floorHeight,
         color = wallColor,
         filled = true, // hình trụ có mặt đáy và nắp hay không
         have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
-        have_filled_outline = true, // mặt đáy và nắp có viền đen hay không
-        [0, 1, 9]
+        have_filled_outline = false, // mặt đáy và nắp có viền đen hay không
+        [0, 1, 6, 7, 8, 9]
+    )
+
+    centroid = GetCentroid(listPoints); // lấy tọa độ trung tâm của nền tường
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + mainStructureHeight + floorHeight
+    ] // cộng thêm chiều cao của nền vào tọa độ trung tâm - nói cách khác là nâng tường lên 1 đơn vị để tường không bị chồng lên nền
+
+    listPoints = MovePolygon(
+        listPoints = listPoints,
+        newCenter = centroid
+    ); // di chuyển tường về trung tâm mới
+
+    RenderCylindner(
+        bottomPoints = listPoints,
+        height = secondFloorHeight + floorHeight + thirdFloorHeight / 2,
+        color = wallColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = false, // mặt đáy và nắp có viền đen hay không
+    )
+
+    let ceilingPoint = listPoints.slice()
+    centroid = [
+        centroid[0],
+        centroid[1],
+        centroid[2] + secondFloorHeight + floorHeight + thirdFloorHeight / 2
+    ]
+
+    ceilingPoint = MovePolygon(
+        listPoints = ceilingPoint,
+        newCenter = centroid
+    )
+
+    RenderCylindner(
+        bottomPoints = ceilingPoint,
+        height = ceilingHeight / 2,
+        color = ceilingColor,
+        filled = true, // hình trụ có mặt đáy và nắp hay không
+        have_outline = true, // các hình polygon tạo thành hình trụ có viền đen hay không
+        have_filled_outline = false, // mặt đáy và nắp có viền đen hay không
     )
 
     //#endregion
@@ -481,21 +578,13 @@ function DrawMainBuilding() {
     reilFirstPoint = thirdFloorListPoints[9];
     reilSecondPoint = thirdFloorListPoints[10];
 
-    RenderRailing(
+    RenderWallFace(
         [
-            reilFirstPoint[0],
-            reilFirstPoint[1],
-            reilFirstPoint[2] + 1,
+            reilFirstPoint,
+            reilSecondPoint
         ],
-        [
-            reilSecondPoint[0],
-            reilSecondPoint[1],
-            reilSecondPoint[2] + 1,
-        ],
-        height = 2,
-        weight = 0.2,
-        color = [0, 0, 0],
-        railCount = 5
+        height = thirdFloorHeight + floorHeight * 2,
+        color = wallColor,
     )
 
     reilFirstPoint = thirdFloorListPoints[13];
